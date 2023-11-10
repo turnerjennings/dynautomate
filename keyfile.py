@@ -41,9 +41,14 @@ class KeywordFile:
             case "fixed":
                 with open(path) as f:
                     keyfile_contents=f.read()
+
                 #create an array of the location of every keyword in the file
                 keyword_locations=[index for index,char in enumerate(keyfile_contents) if char=="*"]
 
+                #extract the nodes of the keyword file
+                nodes_location=FindKeyword(keyfile_contents,"NODE")
+                nodes_string=ReturnKeyword(keyfile_contents,keyword_locations,nodes_location[0])
+                
             case "short":
                 raise ValueError("Short keyfile format not supported yet\n")
             
