@@ -1,3 +1,5 @@
 *.k
 *.cfile
 *.msg
+*.pptx
+testbed.py
