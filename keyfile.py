@@ -52,12 +52,12 @@ class Card:
     def __init__(self,input_string:str,input_range:list[int],format:str):
 
 
-        Card.string=input_string
-        Card.format=format
-        Card.range=input_range
+        self.string=input_string
+        self.format=format
+        self.range=input_range
 
         #extract length and values
-        match Card.format:
+        match self.format:
 
             case 'fixed': #if the card is space delimitted
 
@@ -65,22 +65,21 @@ class Card:
                 
                 #check if there is a comment line or not
                 if card_lines[0][0:1]=="$":
-                    Card.comment=True
+                    self.comment=True
                     card_length=len(card_lines[0])
                     card_lines[1].ljust(card_length)
                     card_lines.pop(0)
                     
                 else:
-                    Card.comment=False
+                    self.comment=False
                     card_length=len(card_lines[0])
                 
                 card_values=[card_lines[0][i:i+10] for i in range(0, card_length, 10)]
 
-                Card.length=len(card_values)
+                self.length=len(card_values)
 
                 #convert values to int or float
                 for i,value in enumerate(card_values):
-                    print(value + "\n")
                     if value.isdigit()==True:
 
                         card_values[i]=int(value)
@@ -96,21 +95,21 @@ class Card:
 
                         raise ValueError("Error parsing fixed card format: Card value at position " + str(i) + " is not an integer or a float")
                     
-                Card.values=card_values
+                self.values=card_values
                 
             case 'short':
                 card_lines=input_string.split('\n')
                 
                 #check if there is a comment line or not
                 if card_lines[0][0:1]=="$":
-                    Card.comment=True
+                    self.comment=True
                     card_lines.pop(0)
                 else:
-                    Card.comment=False
+                    self.comment=False
                 
                 card_values=card_lines[0].split(',')
 
-                Card.length=len(card_values)
+                self.length=len(card_values)
 
                 #convert values to int or float
                 for i,value in enumerate(card_values):
@@ -127,7 +126,7 @@ class Card:
 
                         raise ValueError("Error parsing short card format: Card value at position " + str(i) + " is not an integer or a float")
                     
-                Card.values=card_values
+                self.values=card_values
 
             #case for if the input isn't a fixed or a short
             case _:
@@ -136,31 +135,31 @@ class Card:
 
     #method to print card info        
     def info(self):
-        print("Card Format: " + str(Card.format) + "\nCard comment included: " + str(Card.comment) + 
-              "\nCard Range: " + str(Card.range) +
-              "\nCard Length: " + str(Card.length) + "\nCard Values: " + str(Card.values) +
-              "\nCard String: \n" + str(Card.string))
+        print("Card Format: " + str(self.format) + "\nCard comment included: " + str(self.comment) + 
+              "\nCard Range: " + str(self.range) +
+              "\nCard Length: " + str(self.length) + "\nCard Values: " + str(self.values) +
+              "\nCard String: \n" + str(self.string))
         
     def edit(self,edit_index:int,edit_value):
 
         #check inputs
-        if edit_index > Card.length or edit_index < 0:
+        if edit_index > self.length or edit_index < 0:
             raise IndexError("Value index out of range")
 
 
         #check write format
-        match Card.format:
+        match self.format:
 
             case "fixed":
 
                 #check if the value being inserted is the same as the existing value
-                if type(Card.values[edit_index]) == type(edit_value) or Card.values[edit_index]==0:
+                if type(self.values[edit_index]) == type(edit_value) or self.values[edit_index]==0:
 
                     #check if card has comment and adjust start location accordingly
-                    if Card.comment==True:
-                        preceding_value_end=Card.string.find('\n')+10*edit_index+1
+                    if self.comment==True:
+                        preceding_value_end=self.string.find('\n')+10*edit_index+1
 
-                    elif Card.comment==False:
+                    elif self.comment==False:
                         preceding_value_end=10*edit_index+1
 
                     #find the end of the new value in the array
@@ -168,32 +167,32 @@ class Card:
         
 
                     #define the edit range and the value to be replaced
-                    value_to_replace=Card.string[preceding_value_end:edit_value_end]
+                    value_to_replace=self.string[preceding_value_end:edit_value_end]
                     edit_range=edit_value_end-preceding_value_end
                     
-                    print("Range: " + str([preceding_value_end,edit_value_end]) + "\nStart character: " + Card.string[preceding_value_end] +
-                          "\nEnd character: " + Card.string[edit_value_end] + "\nFull string to be replaced: {" + str(value_to_replace) +"}")
+                    print("Range: " + str([preceding_value_end,edit_value_end]) + "\nStart character: " + self.string[preceding_value_end] +
+                          "\nEnd character: " + self.string[edit_value_end] + "\nFull string to be replaced: {" + str(value_to_replace) +"}")
                    
                     #edit the value in the array
-                    Card.values[edit_index]=edit_value
+                    self.values[edit_index]=edit_value
                     
                     #check if value is integer or float, write accordingly
                     if type(edit_value)==float:
-                        new_string=Card.string[0:preceding_value_end]+f"{edit_value:#.{edit_range-5}G}"+Card.string[edit_value_end:]
-                        Card.string=new_string
+                        new_string=self.string[0:preceding_value_end]+f"{edit_value:#.{edit_range-5}G}"+self.string[edit_value_end:]
+                        self.string=new_string
                         
                         #Card.string=Card.string.replace(value_to_replace,f"{edit_value:#.{edit_range-5}G}")
                         
 
-                    elif type(Card.values[edit_index])==int:
-                        new_string=Card.string[0:preceding_value_end]+f"{edit_value:{edit_range}}"+Card.string[edit_value_end:]
-                        Card.string=new_string
+                    elif type(self.values[edit_index])==int:
+                        new_string=self.string[0:preceding_value_end]+f"{edit_value:{edit_range}}"+self.string[edit_value_end:]
+                        self.string=new_string
                         
                         #Card.string=Card.string.replace(value_to_replace,f"{edit_value:{edit_range}}")
                     
                     else:
                         raise ValueError("The value inserted in the keyword is not an int or a float")
-                    print("New Values: "+str(Card.values)+"\nNew string: \n" + str(Card.string))
+                    print("New Values: "+str(self.values)+"\nNew string: \n" + str(self.string))
                     
 
                 else:
@@ -201,39 +200,39 @@ class Card:
                 
             case "short":
                 #check if the value being inserted is the same as the existing value
-                if type(Card.values[edit_index]) == type(edit_value) or Card.values[edit_index]==0:
+                if type(self.values[edit_index]) == type(edit_value) or self.values[edit_index]==0:
 
                     #check if card has comment and adjust start location accordingly
-                    preceding_value_end=find_nth_comma(Card.string,edit_index)
+                    preceding_value_end=find_nth_comma(self.string,edit_index)
 
                     #find the end of the new value in the array
-                    edit_value_end=Card.string.find(',',preceding_value_end+1)
+                    edit_value_end=self.string.find(',',preceding_value_end+1)
         
 
                     #define the edit range and the value to be replaced
-                    value_to_replace=Card.string[preceding_value_end:edit_value_end]
+                    value_to_replace=self.string[preceding_value_end:edit_value_end]
                     
-                    print("Range: " + str([preceding_value_end,edit_value_end]) + "\nStart character: " + Card.string[preceding_value_end] +
-                          "\nEnd character: " + Card.string[edit_value_end] + "\nFull string to be replaced: {" + str(value_to_replace) +"}")
+                    print("Range: " + str([preceding_value_end,edit_value_end]) + "\nStart character: " + self.string[preceding_value_end] +
+                          "\nEnd character: " + self.string[edit_value_end] + "\nFull string to be replaced: {" + str(value_to_replace) +"}")
                    
                     #edit the value in the array
-                    Card.values[edit_index]=edit_value
+                    self.values[edit_index]=edit_value
                     
                     #check if value is integer or float, write accordingly
                     if type(edit_value)==float:
-                        new_string=Card.string[0:preceding_value_end+1]+f"{edit_value:#.5G}"+Card.string[edit_value_end:]
-                        Card.string=new_string
+                        new_string=self.string[0:preceding_value_end+1]+f"{edit_value:#.5G}"+self.string[edit_value_end:]
+                        self.string=new_string
                                                 
 
-                    elif type(Card.values[edit_index])==int:
-                        new_string=Card.string[0:preceding_value_end+1]+str(edit_value)+Card.string[edit_value_end:]
-                        Card.string=new_string
+                    elif type(self.values[edit_index])==int:
+                        new_string=self.string[0:preceding_value_end+1]+str(edit_value)+self.string[edit_value_end:]
+                        self.string=new_string
                         
                         #Card.string=Card.string.replace(value_to_replace,f"{edit_value:{edit_range}}")
                     
                     else:
                         raise ValueError("The value inserted in the keyword is not an int or a float")
-                    print("New Values: "+str(Card.values)+"\nNew string: \n" + str(Card.string))
+                    print("New Values: "+str(self.values)+"\nNew string: \n" + str(self.string))
                     
 
                 else:
@@ -242,13 +241,13 @@ class Card:
             case "long": 
                 
                #check if the value being inserted is the same as the existing value
-                if type(Card.values[edit_index]) == type(edit_value) or Card.values[edit_index]==0:
+                if type(self.values[edit_index]) == type(edit_value) or self.values[edit_index]==0:
 
                     #check if card has comment and adjust start location accordingly
-                    if Card.comment==True:
-                        preceding_value_end=Card.string.find('\n')+20*edit_index+1
+                    if self.comment==True:
+                        preceding_value_end=self.string.find('\n')+20*edit_index+1
 
-                    elif Card.comment==False:
+                    elif self.comment==False:
                         preceding_value_end=20*edit_index+1
 
                     #find the end of the new value in the array
@@ -256,32 +255,32 @@ class Card:
         
 
                     #define the edit range and the value to be replaced
-                    value_to_replace=Card.string[preceding_value_end:edit_value_end]
+                    value_to_replace=self.string[preceding_value_end:edit_value_end]
                     edit_range=edit_value_end-preceding_value_end
                     
-                    print("Range: " + str([preceding_value_end,edit_value_end]) + "\nStart character: " + Card.string[preceding_value_end] +
-                          "\nEnd character: " + Card.string[edit_value_end] + "\nFull string to be replaced: {" + str(value_to_replace) +"}")
+                    print("Range: " + str([preceding_value_end,edit_value_end]) + "\nStart character: " + self.string[preceding_value_end] +
+                          "\nEnd character: " + self.string[edit_value_end] + "\nFull string to be replaced: {" + str(value_to_replace) +"}")
                    
                     #edit the value in the array
-                    Card.values[edit_index]=edit_value
+                    self.values[edit_index]=edit_value
                     
                     #check if value is integer or float, write accordingly
                     if type(edit_value)==float:
-                        new_string=Card.string[0:preceding_value_end]+f"{edit_value:#.{edit_range-5}G}"+Card.string[edit_value_end:]
-                        Card.string=new_string
+                        new_string=self.string[0:preceding_value_end]+f"{edit_value:#.{edit_range-5}G}"+self.string[edit_value_end:]
+                        self.string=new_string
                         
                         #Card.string=Card.string.replace(value_to_replace,f"{edit_value:#.{edit_range-5}G}")
                         
 
-                    elif type(Card.values[edit_index])==int:
-                        new_string=Card.string[0:preceding_value_end]+f"{edit_value:{edit_range}}"+Card.string[edit_value_end:]
-                        Card.string=new_string
+                    elif type(self.values[edit_index])==int:
+                        new_string=self.string[0:preceding_value_end]+f"{edit_value:{edit_range}}"+self.string[edit_value_end:]
+                        self.string=new_string
                         
                         #Card.string=Card.string.replace(value_to_replace,f"{edit_value:{edit_range}}")
                     
                     else:
                         raise ValueError("The value inserted in the keyword is not an int or a float")
-                    print("New Values: "+str(Card.values)+"\nNew string: \n" + str(Card.string))
+                    print("New Values: "+str(self.values)+"\nNew string: \n" + str(self.string))
                     
 
                 else:
