@@ -66,17 +66,20 @@ class Card:
                 #check if there is a comment line or not
                 if card_lines[0][0:1]=="$":
                     Card.comment=True
+                    card_length=len(card_lines[0])
                     card_lines.pop(0)
+                    
                 else:
                     Card.comment=False
+                    card_length=len(card_lines[0])
                 
-                card_values=card_lines[0].split()
+                card_values=[card_lines[0][i:i+10] for i in range(0, card_length, 10)]
 
                 Card.length=len(card_values)
 
                 #convert values to int or float
                 for i,value in enumerate(card_values):
-
+                    print(value + "\n")
                     if value.isdigit()==True:
 
                         card_values[i]=int(value)
