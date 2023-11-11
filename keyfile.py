@@ -64,7 +64,7 @@ class Card:
                 card_lines=input_string.split('\n')
                 
                 #check if there is a comment line or not
-                if card_lines[0][0:2]=="$#":
+                if card_lines[0][0:1]=="$":
                     Card.comment=True
                     card_lines.pop(0)
                 else:
@@ -95,7 +95,7 @@ class Card:
                 card_lines=input_string.split('\n')
                 
                 #check if there is a comment line or not
-                if card_lines[0][0:2]=="$#":
+                if card_lines[0][0:1]=="$":
                     Card.comment=True
                     card_lines.pop(0)
                 else:
