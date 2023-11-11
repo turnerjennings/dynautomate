@@ -67,6 +67,7 @@ class Card:
                 if card_lines[0][0:1]=="$":
                     Card.comment=True
                     card_length=len(card_lines[0])
+                    card_lines[1].ljust(card_length)
                     card_lines.pop(0)
                     
                 else:
@@ -87,6 +88,9 @@ class Card:
                     elif is_float(value)==True:
 
                         card_values[i]=float(value)
+
+                    elif value.isspace()==True:
+                        card_values[i]='          '
 
                     else:
 
