@@ -122,6 +122,8 @@ class Card:
 
                         card_values[i]=float(value)
 
+                    elif value=='' or value.isspace()==True:
+                        card_values[i]=''
                     else:
 
                         raise ValueError("Error parsing short card format: Card value at position " + str(i) + " is not an integer or a float")
