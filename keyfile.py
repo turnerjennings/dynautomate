@@ -290,6 +290,59 @@ class Card:
                 raise ValueError("Unknown card format")
 
 
+class Keyword:
+
+    def __init__(self,input_string:str,input_range:list[int],format:str):
+        
+        #initialize basic properties
+        self.string=input_string
+        self.format=format
+        self.range=input_range
+        self.cards=[]
+
+        #check if the string contains comments and the title block
+        end_first_line=input_string.find('\n')
+        self.name=input_string[0:end_first_line]
+
+        
+        #for each line in the self, sort according to title, comment, and values
+        range_count=0
+        comment_line=None
+        card_contents=[]
+        for i,line in enumerate(input_string.splitlines()):
+            #check if the line is a comment, if so store it
+            if line.find('$') >=0:
+                comment_line=line
+
+            #if the line is not a comment   
+            elif line.find("*")<0:
+                
+                #check if the previous line was a comment
+                if comment_line != None:
+                    #if yes, add previous comment line to current comment line, the reset comment line
+                    card_string=comment_line + "\n" + line
+                    comment_line=None
+
+                else:
+                    #if no, set card string to current line
+                    card_string=line
+
+                #create a new card using the current line and append it to the array
+                new_card=Card(card_string,[range_count,range_count+len(line)],self.format)
+                self.cards.append(new_card)
+            
+
+                #update the start point of the next range
+                range_count += len(line)+1
+    
+        #count the number of cards
+        self.cardcount=len(self.cards)
+    
+
+    def info(self):
+        print("Keyword name: " + str(self.name) + "\nKeyword format: " + str(self.format) + 
+              "\nKeyword range: " + str(self.range) + "\nKeyword card count: " + str(self.cardcount) + 
+              "\nKeyword cards: \n" + str(self.cards) + "\nKeyword string: \n" + str(self.string))
 
 
 #define keyword file object
