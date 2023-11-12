@@ -341,11 +341,15 @@ class Keyword:
         #count the number of cards
         self.cardcount=len(self.cards)
     
-
+    #method to print info about the keyword
     def info(self):
         print("Keyword name: " + str(self.name) + "\nKeyword format: " + str(self.format) + 
               "\nKeyword range: " + str(self.range) + "\nKeyword card count: " + str(self.cardcount) + 
               "\nKeyword cards: \n" + str(self.cards) + "\nKeyword string: \n" + str(self.string))
+        
+    #method to return a card from the list in the keyword
+    def get_card(self, card_num:int):
+        return self.cards[card_num]
 
 
 #define keyword file object
