@@ -156,7 +156,7 @@ class Card:
             case "fixed":
 
                 #check if the value being inserted is the same as the existing value
-                if type(self.values[edit_index]) == type(edit_value) or self.values[edit_index]==0:
+                if type(self.values[edit_index]) == type(edit_value) or self.values[edit_index]==0 or self.values[edit_index]=='          ':
 
                     #check if card has comment and adjust start location accordingly
                     if self.comment==True:
@@ -181,7 +181,7 @@ class Card:
                     
                     #check if value is integer or float, write accordingly
                     if type(edit_value)==float:
-                        new_string=self.string[0:preceding_value_end]+f"{edit_value:#.{edit_range-5}G}"+self.string[edit_value_end:]
+                        new_string=self.string[0:preceding_value_end]+f"{edit_value:#.{edit_range-5}G}".rjust(10)+self.string[edit_value_end:]
                         self.string=new_string
                         
                         #Card.string=Card.string.replace(value_to_replace,f"{edit_value:#.{edit_range-5}G}")
@@ -269,7 +269,7 @@ class Card:
                     
                     #check if value is integer or float, write accordingly
                     if type(edit_value)==float:
-                        new_string=self.string[0:preceding_value_end]+f"{edit_value:#.{edit_range-5}G}"+self.string[edit_value_end:]
+                        new_string=self.string[0:preceding_value_end]+f"{edit_value:#.{edit_range-5}G}".rjust(20)+self.string[edit_value_end:]
                         self.string=new_string
                         
                         #Card.string=Card.string.replace(value_to_replace,f"{edit_value:#.{edit_range-5}G}")
