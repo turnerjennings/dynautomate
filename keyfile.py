@@ -206,29 +206,44 @@ class Card:
                 if type(self.values[edit_index]) == type(edit_value) or self.values[edit_index]==0 or self.values[edit_index]=='':
 
                     #check if card has comment and adjust start location accordingly
-                    preceding_value_end=find_nth_comma(self.string,edit_index)
+                    comma_location=find_nth_comma(self.string,edit_index)
+
+                    #if there is no commas on the line to start
+                    if comma_location < 0:
+                        preceding_value_end=0
+                        edit_value_end=1
+                    else:
+                        preceding_value_end=comma_location
+                        edit_value_end=self.string.find(',',preceding_value_end+1)
 
                     #find the end of the new value in the array
-                    edit_value_end=self.string.find(',',preceding_value_end+1)
+                    
+                    
         
 
                     #define the edit range and the value to be replaced
                     value_to_replace=self.string[preceding_value_end:edit_value_end]
                     
-                    print("Range: " + str([preceding_value_end,edit_value_end]) + "\nStart character: " + self.string[preceding_value_end] +
-                          "\nEnd character: " + self.string[edit_value_end] + "\nFull string to be replaced: {" + str(value_to_replace) +"}")
+                    #print("Range: " + str([preceding_value_end,edit_value_end]) + "\nStart character: " + self.string[preceding_value_end] +
+                    #      "\nEnd character: " + self.string[edit_value_end] + "\nFull string to be replaced: {" + str(value_to_replace) +"}")
                    
                     #edit the value in the array
                     self.values[edit_index]=edit_value
                     
                     #check if value is integer or float, write accordingly
                     if type(edit_value)==float:
-                        new_string=self.string[0:preceding_value_end+1]+f"{edit_value:#.5G}"+self.string[edit_value_end:]
+                        if comma_location < 0:
+                            new_string=self.string[0:preceding_value_end+1]+f"{edit_value:#.5G}"+','+self.string[edit_value_end:]
+                        else:
+                            new_string=self.string[0:preceding_value_end+1]+f"{edit_value:#.5G}"+self.string[edit_value_end:]
                         self.string=new_string
                                                 
 
                     elif type(self.values[edit_index])==int:
-                        new_string=self.string[0:preceding_value_end+1]+str(edit_value)+self.string[edit_value_end:]
+                        if comma_location < 0:
+                            new_string=self.string[0:preceding_value_end+1]+str(edit_value)+','+self.string[edit_value_end:]
+                        else:
+                            new_string=self.string[0:preceding_value_end+1]+str(edit_value)+self.string[edit_value_end:]
                         self.string=new_string
                         
                         #Card.string=Card.string.replace(value_to_replace,f"{edit_value:{edit_range}}")
