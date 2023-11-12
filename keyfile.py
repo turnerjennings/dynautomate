@@ -163,7 +163,7 @@ class Card:
                         preceding_value_end=self.string.find('\n')+10*edit_index+1
 
                     elif self.comment==False:
-                        preceding_value_end=10*edit_index+1
+                        preceding_value_end=10*edit_index
 
                     #find the end of the new value in the array
                     edit_value_end=preceding_value_end+10
@@ -326,7 +326,6 @@ class Keyword:
         #for each line in the self, sort according to title, comment, and values
         range_count=0
         comment_line=None
-        card_contents=[]
         for i,line in enumerate(input_string.splitlines()):
             #check if the line is a comment, if so store it
             if line.find('$') >=0:
@@ -351,20 +350,61 @@ class Keyword:
             
 
                 #update the start point of the next range
-                range_count += len(line)+1
+                range_count+=len(card_string)+1
+            else:
+                range_count+=len(line)+1
+                
+            
     
         #count the number of cards
         self.cardcount=len(self.cards)
     
-    #method to print info about the keyword
+    #method to print the keyword information
     def info(self):
         print("Keyword name: " + str(self.name) + "\nKeyword format: " + str(self.format) + 
               "\nKeyword range: " + str(self.range) + "\nKeyword card count: " + str(self.cardcount) + 
               "\nKeyword cards: \n" + str(self.cards) + "\nKeyword string: \n" + str(self.string))
         
-    #method to return a card from the list in the keyword
+
+    #method to retrieve a card from the list as a new object outside of the keyword    
     def get_card(self, card_num:int):
         return self.cards[card_num]
+    
+
+    #method to edit a card without retrieving it
+    def edit_card(self,card_num,edit_index:int,edit_value):
+
+        #edit the card object
+        self.cards[card_num].edit(edit_index,edit_value)
+        
+        #define the string to be inserted into the keyword string
+        new_card_string=str(self.cards[card_num].string)
+
+        #define the range of indices to be replaced
+        insert_range=self.cards[card_num].range
+        
+        #insert the values into the string
+        new_keyword_string=self.string[:insert_range[0]]+new_card_string+self.string[insert_range[1]:]
+        self.string=new_keyword_string
+    
+
+    #method to replace a card with a new card
+    def replace_card(self,card_num,card_replace):
+        self.cards[card_num]=card_replace
+        
+        #define the string to be inserted into the keyword string
+        new_card_string=str(self.cards[card_num].string)
+
+        #define the range of indices to be replaced
+        insert_range=self.cards[card_num].range
+        
+        #insert the values into the string
+        new_keyword_string=self.string[:insert_range[0]]+new_card_string+self.string[insert_range[1]:]
+        self.string=new_keyword_string
+
+    
+
+
 
 
 #define keyword file object
