@@ -79,7 +79,8 @@ class Card:
                 self.length=len(card_values)
 
                 #convert values to int or float
-                for i,value in enumerate(card_values):
+                for i,val in enumerate(card_values):
+                    value=val.lstrip()
                     if value.isdigit()==True:
 
                         card_values[i]=int(value)
@@ -88,7 +89,7 @@ class Card:
 
                         card_values[i]=float(value)
 
-                    elif value.isspace()==True:
+                    elif value=='':
                         card_values[i]='          '
 
                     else:
@@ -172,8 +173,8 @@ class Card:
                     value_to_replace=self.string[preceding_value_end:edit_value_end]
                     edit_range=edit_value_end-preceding_value_end
                     
-                    print("Range: " + str([preceding_value_end,edit_value_end]) + "\nStart character: " + self.string[preceding_value_end] +
-                          "\nEnd character: " + self.string[edit_value_end] + "\nFull string to be replaced: {" + str(value_to_replace) +"}")
+                    #print("Range: " + str([preceding_value_end,edit_value_end]) + "\nStart character: " + self.string[preceding_value_end] +
+                    #      "\nEnd character: " + self.string[edit_value_end] + "\nFull string to be replaced: {" + str(value_to_replace) +"}")
                    
                     #edit the value in the array
                     self.values[edit_index]=edit_value
@@ -194,7 +195,7 @@ class Card:
                     
                     else:
                         raise ValueError("The value inserted in the keyword is not an int or a float")
-                    print("New Values: "+str(self.values)+"\nNew string: \n" + str(self.string))
+                    #print("New Values: "+str(self.values)+"\nNew string: \n" + str(self.string))
                     
 
                 else:
