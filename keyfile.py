@@ -203,7 +203,7 @@ class Card:
                 
             case "short":
                 #check if the value being inserted is the same as the existing value
-                if type(self.values[edit_index]) == type(edit_value) or self.values[edit_index]==0:
+                if type(self.values[edit_index]) == type(edit_value) or self.values[edit_index]==0 or self.values[edit_index]=='':
 
                     #check if card has comment and adjust start location accordingly
                     preceding_value_end=find_nth_comma(self.string,edit_index)
