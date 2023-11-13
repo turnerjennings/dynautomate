@@ -429,23 +429,28 @@ class Keyword:
 class KeywordFile:
 
 
-    def __init__(self, path, type):
+    def __init__(self, path:str, format:str):
 
         #define keyword file object using inputs of the filepath to open and the data type ("fixed" or "short") 
         #check the given type to determine whether to interpret file via fixed width or via comma separation
-        match type: 
+        match format: 
 
             case "fixed":
+
+                #read contents of input file
                 with open(path) as f:
                     keyfile_contents=f.read()
+                self.string=keyfile_contents
+                
+                #define object properties from inputs
+                self.format=format
 
                 #create an array of the location of every keyword in the file
                 keyword_locations=[index for index,char in enumerate(keyfile_contents) if char=="*"]
+                self.keyword_indices=keyword_locations
+                self.keywordcount=len(keyword_locations)
 
-                #extract the nodes of the keyword file
-                nodes_location=FindKeyword(keyfile_contents,"NODE")
-                nodes_string=ReturnKeyword(keyfile_contents,keyword_locations,nodes_location[0])
-                
+
             case "short":
                 raise ValueError("Short keyfile format not supported yet\n")
             
@@ -454,5 +459,17 @@ class KeywordFile:
             
             case __:
                 raise ValueError("Unknown keyfile type\n")
+            
+    def find_all_instances(string, string_to_find):
+            indices=[]
+            index = string.find(string_to_find)
+            while index != -1:
+                indices.append(index)
+                index = string.find(string_to_find, index + 1)
+
+            if len(indices==0):
+                raise Exception(f"No instances of the phrase *{string_to_find}* were found")
+            else:
+                return indices
 
 k=KeywordFile("test_keyword.k","fixed")
