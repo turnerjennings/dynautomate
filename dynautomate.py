@@ -134,7 +134,15 @@ class Card:
             #case for if the input isn't a fixed or a short
             case _:
                 raise ValueError("Card format unexpected or unsupported")
+    
+    #define object magic methods
+    def __str__ (self): return f"Card(Number of values: {self.length}, Range: {self.range})"
 
+    def __len__(self): return len(self.values)
+
+    def __getitem__(self, key): return self.values[key]
+
+    def __setitem__(self,key,value): self.edit(key,value)
 
     #method to print card info        
     def info(self):
@@ -365,6 +373,16 @@ class Keyword:
               "\nKeyword range: " + str(self.range) + "\nKeyword card count: " + str(self.cardcount) + 
               "\nKeyword cards: \n" + str(self.cards) + "\nKeyword string: \n" + str(self.string))
         
+
+
+    #define magic methods
+    def __str__(self): return f"Keyword(Number of cards: {self.cardcount}, Range: {self.range})"
+    
+    def __len__(self): return self.cardcount
+
+    def __getitem__(self, key): return self.cards[key]
+
+    def __setitem__(self,key,value): self.edit_card(key,value)
 
     #method to retrieve a card from the list as a new object outside of the keyword    
     def get_card(self, card_num:int):
