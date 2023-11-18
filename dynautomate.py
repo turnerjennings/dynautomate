@@ -440,7 +440,54 @@ class Nodes:
         
             
             
+class Transformation:
+     
+    def init(self):
+        self.matrix=np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])
         
+    def scale(self,sx:float,sy:float,sz:float):
+        scale_matrix=np.array([[sx,0,0,0],[0,sy,0,0],[0,0,sz,0],[0,0,0,1]])
+        self.matrix=np.matmul(self.matrix,scale_matrix)
+        
+    def translate(self,tx:float,ty:float,tz:float):
+        translate_matrix=np.array([[1,0,0,tx],[0,1,0,ty],[0,0,1,tz],[0,0,0,1]])
+        self.matrix=np.matmul(self.matrix,translate_matrix)
+        
+    def rotate(self,p1:tuple[float],p2:tuple[float],angle):
+        
+        #convert angle to radians
+        angle_rad=angle*3.1415926535/180
+        
+        #create the translation operators
+        T_operator=np.array([[1,0,0,-p1[0]],
+                             [0,1,0,-p1[1]],
+                             [0,0,1,-p1[2]],
+                             [0,0,0,1]])
+        Tinv_operator=np.array([[1,0,0,p1[0]],
+                                [0,1,0,p1[1]],
+                                [0,0,1,p1[2]],
+                                [0,0,0,1]])
+        
+        #create the orthonormal coordinate system
+        s=np.array([[p2[0]-p1[0],p2[1]-p1[1],p2[2]-p1[2]],[1,1,0],[0,0,1]])
+        M_operator,R=np.linalg.qr(s)
+        Minv_operator=M_operator.transpose()
+        
+        #calculate the angle matrix
+        c=np.cos(angle_rad)
+        s=np.sin(angle_rad)
+        
+        R_operator=np.array([[c,s,0,0],[-s,c,0,0],[0,0,1,0],[0,0,0,1]])
+        
+        rotate_matrix=Tinv_operator @ Minv_operator @ R_operator @ M_operator @ T_operator
+        
+        self.matrix=np.matmul(self.matrix,rotate_matrix)
+        
+        
+        
+        
+         
+           
         
         
     
