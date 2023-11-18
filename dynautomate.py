@@ -530,4 +530,13 @@ class KeywordFile:
         + old_keyfile_string[insert_range[1]+1:]
         self.length=len(self.string)
         
+    def write_keyfile(self,path:str):
+        #check if extension includes .k
+        if path[-2:]!=".k":
+            path=path + ".k"
+        
+        #open output file
+        with open(path,mode='w') as fout:
+            fout.write(self.string)
+        
     
