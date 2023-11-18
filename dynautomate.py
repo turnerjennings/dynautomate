@@ -443,6 +443,7 @@ class KeywordFile:
         #define object properties from inputs
         self.format=format
         self.path=path
+        self.length=len(self.string)
 
         #create an array of the location of every keyword in the file
         indices=[]
@@ -471,9 +472,62 @@ class KeywordFile:
     #def __getitem__(self, key): return self.cards[key]
 
     #def __setitem__(self,key,value): self.edit_card(key,value)
+    
+    def info(self):
+        print(f"Keyword file\nTitle: {self.title}\nFile length: {self.length}\n" + 
+              f"Number of keywords: {self.keywordcount}\nKeyword locations:\n {self.keywordlocations}\n")
+    
+    
+    #function to return a list of all keywords of a type in the deck
+    def get_keywords(self,keyword_title:str):
+        title_length=len(keyword_title)
+        keyword_list=[]
         
-
+        #for each keyword location, 
+        for idx,loc in enumerate(self.keywordlocations):
             
+            #check if it's the correct keyword
+            if self.string[loc+1:loc+1+title_length]==keyword_title:
+                
+                #extract the string of the keyword
+                new_keyword_string=self.string[self.keywordlocations[idx]:self.keywordlocations[idx+1]-1]
+                new_keyword_range=[self.keywordlocations[idx],self.keywordlocations[idx+1]-1]
+                
+                #create keyword object
+                new_keyword=Keyword(new_keyword_string,new_keyword_range,self.format)
+                keyword_list.append(new_keyword)
 
 
-
+        #check if any keywords were found and return list or raise exception
+        if len(keyword_list)==0:
+            raise Exception(f"No keyword of type *{keyword_title} found")
+        else:
+            return keyword_list
+     
+     
+                
+    #method to replace a keyword in the string with a new keyword object
+    def replace_keyword(self,keyword_to_replace:Keyword):
+        #define the range and string to be inserted
+        insert_range=keyword_to_replace.range
+        insert_string=keyword_to_replace.string
+        old_keyfile_string=self.string
+        
+        self.string=old_keyfile_string[0:insert_range[0]] + insert_string 
+        + old_keyfile_string[insert_range[1]+1:]
+        self.length=len(self.string)
+        
+    
+    
+    #method to replace a card in the string with a new card object
+    def replace_card(self,card_to_replace:Card):
+        #define the range and string to be inserted
+        insert_range=card_to_replace.range
+        insert_string=card_to_replace.string
+        old_keyfile_string=self.string
+        
+        self.string=old_keyfile_string[0:insert_range[0]] + insert_string 
+        + old_keyfile_string[insert_range[1]+1:]
+        self.length=len(self.string)
+        
+    
