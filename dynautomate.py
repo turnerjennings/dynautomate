@@ -1,31 +1,5 @@
 import numpy as np
-import re
 
-
-#function to find all keywords of a given type
-#return: array of the first index of the given keyword at all locations it appears
-def FindKeyword(key_file:str,key_title:str):
-    start_index=[]
-    search_term=re.compile(r'\*'+key_title) #define the re search term
-    matches=search_term.finditer(key_file) #find all matching locations in the string
-    for match in matches:
-        start_index.append(match.start())
-    return start_index
-    
-
-#function ot extract the string of a keyword given its start location
-#return: string representing the total contents of a keyword file
-def ReturnKeyword(key_file:str, key_locations:list, key_start:int) -> str:
-    key_end=None
-    for idx, val in enumerate(key_locations):
-        if val > key_start:
-            key_end=val
-            break 
-    if key_end is not None:
-        keyword_match=key_file[key_start:key_end]
-    else:
-        keyword_match=key_file[key_start:]
-    return keyword_match
 
 #function to check if a number in a string is a float
 #return: boolean
@@ -316,6 +290,7 @@ class Card:
                 raise ValueError("Unknown card format")
 
 
+#define keyword object
 class Keyword:
 
     def __init__(self,input_string:str,input_range:list[int],format:str):
@@ -421,11 +396,7 @@ class Keyword:
         self.string=new_keyword_string
 
     
-
-
-
-
-#define keyword file object
+#define keyfile object
 class KeywordFile:
 
 
@@ -468,17 +439,15 @@ class KeywordFile:
     def __str__(self): return f"Keyword file (Title: {self.title} Number of keywords: {self.keywordcount})"
     
     def __len__(self): return self.keywordcount
-
-    #def __getitem__(self, key): return self.cards[key]
-
-    #def __setitem__(self,key,value): self.edit_card(key,value)
     
+    
+    #method to print keyfile info
     def info(self):
         print(f"Keyword file\nTitle: {self.title}\nFile length: {self.length}\n" + 
               f"Number of keywords: {self.keywordcount}\nKeyword locations:\n {self.keywordlocations}\n")
     
     
-    #function to return a list of all keywords of a type in the deck
+    #method to return a list of all keywords of a type in the deck
     def get_keywords(self,keyword_title:str):
         title_length=len(keyword_title)
         keyword_list=[]
