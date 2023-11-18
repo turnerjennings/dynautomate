@@ -289,6 +289,7 @@ class Card:
             case _:
                 raise ValueError("Unknown card format")
 
+   
 
 #define keyword object
 class Keyword:
@@ -344,9 +345,14 @@ class Keyword:
     
     #method to print the keyword information
     def info(self):
+        if len(self.string) > 100:
+            string_snippet=self.string[0:500]+"..."
+        else:
+            string_snippet=self.string
+        
         print("Keyword name: " + str(self.name) + "\nKeyword format: " + str(self.format) + 
               "\nKeyword range: " + str(self.range) + "\nKeyword card count: " + str(self.cardcount) + 
-              "\nKeyword cards: \n" + str(self.cards) + "\nKeyword string: \n" + str(self.string))
+              "\nKeyword cards: \n" + str(self.cards) + "\nKeyword string: \n" + str(string_snippet))
         
 
 
@@ -395,6 +401,50 @@ class Keyword:
         new_keyword_string=self.string[:insert_range[0]]+new_card_string+self.string[insert_range[1]:]
         self.string=new_keyword_string
 
+
+
+#object to handle nodes
+class Nodes:
+    
+    def __init__(self,input_string:str,input_range:list[int],format:str):
+        
+        
+        #define basic inputs
+        self.name="NODE"
+        self.format=format
+        self.string=input_string
+        self.range=input_range
+        
+        #split lines and eject title line
+        lines=input_string.split("\n")
+        lines.pop(0)
+        
+        self.nodes=np.empty((len(lines),6))
+        
+        
+        #split nodal values depending on format
+        for idx,string in enumerate(lines):
+            match self.format:
+            
+                case "fixed":
+                    line_values=string.split()
+                    self.nodes[idx,:]=line_values
+            
+                case "long":
+                    line_values=string.split()
+                    self.nodes[idx,:]=line_values
+            
+                case "short":
+                    line_values=string.split(",")
+                    self.nodes[idx,:]=line_values
+        
+            
+            
+        
+        
+        
+    
+    
     
 #define keyfile object
 class KeywordFile:
@@ -485,6 +535,8 @@ class KeywordFile:
         self.string=old_keyfile_string[0:insert_range[0]] + insert_string 
         + old_keyfile_string[insert_range[1]+1:]
         self.length=len(self.string)
+        
+        #calculate length offsets
         
     
     
