@@ -442,8 +442,8 @@ class Nodes:
             
 class Transformation:
      
-    def init(self):
-        self.matrix=np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])
+    def __init__(self):
+        self.matrix=np.eye(4)
         
     def scale(self,sx:float,sy:float,sz:float):
         scale_matrix=np.array([[sx,0,0,0],[0,sy,0,0],[0,0,sz,0],[0,0,0,1]])
@@ -470,7 +470,12 @@ class Transformation:
         
         #create the orthonormal coordinate system
         s=np.array([[p2[0]-p1[0],p2[1]-p1[1],p2[2]-p1[2]],[1,1,0],[0,0,1]])
-        M_operator,R=np.linalg.qr(s)
+        Q,R=np.linalg.qr(s)
+        
+        #create the rotation operators
+        M_operator=np.zeros((4,4))
+        M_operator[0:3,0:3]=Q
+        M_operator[3,3]=1
         Minv_operator=M_operator.transpose()
         
         #calculate the angle matrix
@@ -482,6 +487,9 @@ class Transformation:
         rotate_matrix=Tinv_operator @ Minv_operator @ R_operator @ M_operator @ T_operator
         
         self.matrix=np.matmul(self.matrix,rotate_matrix)
+        
+    def info(self):
+        print(f"Transformation matrix:\n{self.matrix}")
         
         
         
