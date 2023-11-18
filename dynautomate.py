@@ -433,43 +433,47 @@ class KeywordFile:
 
         #define keyword file object using inputs of the filepath to open and the data type ("fixed" or "short") 
         #check the given type to determine whether to interpret file via fixed width or via comma separation
-        match format: 
-
-            case "fixed":
-
-                #read contents of input file
-                with open(path) as f:
-                    keyfile_contents=f.read()
-                self.string=keyfile_contents
+        
+        
+        #read contents of input file
+        with open(path) as f:
+            keyfile_contents=f.read()
+        self.string=keyfile_contents
                 
-                #define object properties from inputs
-                self.format=format
+        #define object properties from inputs
+        self.format=format
+        self.path=path
 
-                #create an array of the location of every keyword in the file
-                keyword_locations=[index for index,char in enumerate(keyfile_contents) if char=="*"]
-                self.keyword_indices=keyword_locations
-                self.keywordcount=len(keyword_locations)
+        #create an array of the location of every keyword in the file
+        indices=[]
+        index = self.string.find("*")
+        while index != -1:
+            indices.append(index)
+            index = self.string.find("*", index + 1)
 
-
-            case "short":
-                raise ValueError("Short keyfile format not supported yet\n")
+        if len(indices)==0:
+            raise Exception("No keywords found in file")
+        
+        self.keywordlocations=indices
+        self.keywordcount=len(indices)
+        
+        #define keyword deck title
+        if self.string[self.keywordlocations[1]+1:self.keywordlocations[1]+6]=="TITLE":
+            self.title=self.string[self.keywordlocations[1]+7:self.keywordlocations[2]-1]
+        else:
+            self.title=None
             
-            case "long":
-                raise ValueError("Long keyfile format not supported yet\n")
-            
-            case __:
-                raise ValueError("Unknown keyfile type\n")
-            
-    def find_all_instances(string, string_to_find):
-            indices=[]
-            index = string.find(string_to_find)
-            while index != -1:
-                indices.append(index)
-                index = string.find(string_to_find, index + 1)
+    #initialize magic methods
+    def __str__(self): return f"Keyword file (Title: {self.title} Number of keywords: {self.keywordcount})"
+    
+    def __len__(self): return self.keywordcount
 
-            if len(indices==0):
-                raise Exception(f"No instances of the phrase *{string_to_find}* were found")
-            else:
-                return indices
+    #def __getitem__(self, key): return self.cards[key]
 
-k=KeywordFile("test_keyword.k","fixed")
+    #def __setitem__(self,key,value): self.edit_card(key,value)
+        
+
+            
+
+
+
