@@ -492,28 +492,29 @@ class Transformation:
     def rotate(self, p1: list[float], p2: list[float], angle):
         # convert angle to radians and calculate trig terms
         angle_rad = angle * 3.1415926535 / 180
-        c=np.cos(angle_rad)
-        s=np.sin(angle_rad)
-        nc=(1-c)
+        c = np.cos(angle_rad)
+        s = np.sin(angle_rad)
+        nc = 1 - c
 
-        #define unit vector between p1 and p2
-        omega=np.array([p2[0]-p1[0],p2[1]-p1[1],p2[2]-p1[2]],dtype=float)
-        omega/=np.linalg.norm(omega)
-        
-        #define matrix using rodrigues formula
-        wx,wy,wz=omega
-        
-        rotate_matrix=np.array([
-            [c+(wx*wx)*nc,wx*wy*nc-wz*s,wy*s+wx*wz*nc,0],
-            [wz*s+wx*wy*nc,c+(wy*wy)*nc,-wx*s+wy*wz*nc,0],
-            [-wy*s+wx*wz*nc,wx*s+wy*wz*nc,c+(wz*wz)*nc,0],
-            [0,0,0,1]
-        ])
+        # define unit vector between p1 and p2
+        omega = np.array([p2[0] - p1[0], p2[1] - p1[1], p2[2] - p1[2]], dtype=float)
+        omega /= np.linalg.norm(omega)
+
+        # define matrix using rodrigues formula
+        wx, wy, wz = omega
+
+        rotate_matrix = np.array(
+            [
+                [c + (wx * wx) * nc, wx * wy * nc - wz * s, wy * s + wx * wz * nc, 0],
+                [wz * s + wx * wy * nc, c + (wy * wy) * nc, -wx * s + wy * wz * nc, 0],
+                [-wy * s + wx * wz * nc, wx * s + wy * wz * nc, c + (wz * wz) * nc, 0],
+                [0, 0, 0, 1],
+            ]
+        )
         print(f"Rotate matrix:\n {rotate_matrix}")
-        
 
-        #clean small values
-        rotate_matrix[np.abs(rotate_matrix) < 1e-9]=0
+        # clean small values
+        rotate_matrix[np.abs(rotate_matrix) < 1e-9] = 0
 
         self.matrix = rotate_matrix @ self.matrix
 
@@ -533,9 +534,9 @@ class Nodes:
         # split lines and eject title line
         lines = input_string.split("\n")
         lines.pop(0)
-        if lines[0][0:1]=='$':
+        if lines[0][0:1] == "$":
             lines.pop(0)
-        self.numnodes=len(lines)
+        self.numnodes = len(lines)
         self.nodes = np.empty((len(lines), 6))
 
         # split nodal values depending on format
@@ -552,72 +553,75 @@ class Nodes:
                 case "short":
                     line_values = string.split(",")
                     self.nodes[idx, :] = line_values
-                    
-        
-                    
-    #method to transform a set of nodes using a transformation operator
-    def transform(self,node_set:list[int],operator:Transformation):
-        tmatrix=operator.matrix
-        
-        for index in node_set:
-            #extract nodal coordinates and reformat
-            coordinates=self.nodes[index,1:4]
-            coordinates=np.hstack((coordinates,np.array([1])))
-            coordinates=coordinates.reshape(-1,1)
 
-            #apply transformations
-            new_coordinates=tmatrix @ coordinates
+    # method to transform a set of nodes using a transformation operator
+    def transform(self, node_set: list[int], operator: Transformation):
+        tmatrix = operator.matrix
+
+        for index in node_set:
+            # extract nodal coordinates and reformat
+            coordinates = self.nodes[index, 1:4]
+            coordinates = np.hstack((coordinates, np.array([1])))
+            coordinates = coordinates.reshape(-1, 1)
+
+            # apply transformations
+            new_coordinates = tmatrix @ coordinates
             print(f"New vector: {new_coordinates}")
-            self.nodes[index,1:4]=new_coordinates[0:3].transpose()
+            self.nodes[index, 1:4] = new_coordinates[0:3].transpose()
         self.update_string()
-            
-    
-    #method to update the nodes string
+
+    # method to update the nodes string
     def update_string(self):
-        lines=["*NODE"]
+        lines = ["*NODE"]
         match self.format:
             case "fixed":
                 for i in range(self.numnodes):
-                    line_values=self.nodes[i,0:]
-                    line_string=(
-                        f"{int(line_values[0]):8}".rjust(8)+
-                        f"{line_values[1]:11G}".rjust(16)+
-                        f"{line_values[2]:11G}".rjust(16)+
-                        f"{line_values[3]:11G}".rjust(16)+
-                        f"{line_values[4]:8G}".rjust(8)+
-                        f"{line_values[5]:8G}".rjust(8)
+                    line_values = self.nodes[i, 0:]
+                    line_string = (
+                        f"{int(line_values[0]):8}".rjust(8)
+                        + f"{line_values[1]:11G}".rjust(16)
+                        + f"{line_values[2]:11G}".rjust(16)
+                        + f"{line_values[3]:11G}".rjust(16)
+                        + f"{line_values[4]:8G}".rjust(8)
+                        + f"{line_values[5]:8G}".rjust(8)
                     )
                     lines.append(line_string)
-                
+
             case "long":
                 for i in range(self.numnodes):
-                    line_values=self.nodes[i,0:]
-                    line_string=(
-                        f"{int(line_values[0]):20}".rjust(20)+
-                        f"{line_values[1]:15G}".rjust(20)+
-                        f"{line_values[2]:15G}".rjust(20)+
-                        f"{line_values[3]:15G}".rjust(20)+
-                        f"{line_values[4]:15G}".rjust(20)+
-                        f"{line_values[5]:15G}"
+                    line_values = self.nodes[i, 0:]
+                    line_string = (
+                        f"{int(line_values[0]):20}".rjust(20)
+                        + f"{line_values[1]:15G}".rjust(20)
+                        + f"{line_values[2]:15G}".rjust(20)
+                        + f"{line_values[3]:15G}".rjust(20)
+                        + f"{line_values[4]:15G}".rjust(20)
+                        + f"{line_values[5]:15G}"
                     )
                     lines.append(line_string)
-            
+
             case "short":
                 for i in range(self.numnodes):
-                    line_values=self.nodes[i,0:]
-                    line_string=(
-                        f"{int(line_values[0])}"+","+
-                        f"{line_values[1]}"+","+
-                        f"{line_values[2]}"+","+
-                        f"{line_values[3]}"+","+
-                        f"{line_values[4]}"+","+
-                        f"{line_values[5]}"+","
+                    line_values = self.nodes[i, 0:]
+                    line_string = (
+                        f"{int(line_values[0])}"
+                        + ","
+                        + f"{line_values[1]}"
+                        + ","
+                        + f"{line_values[2]}"
+                        + ","
+                        + f"{line_values[3]}"
+                        + ","
+                        + f"{line_values[4]}"
+                        + ","
+                        + f"{line_values[5]}"
+                        + ","
                     )
                     lines.append(line_string)
-            
-        self.string="\n".join(lines)
-            
-            
+
+        self.string = "\n".join(lines)
+
+
 # define keyfile object
 class KeywordFile:
     def __init__(self, path: str, format: str):
@@ -667,10 +671,10 @@ class KeywordFile:
     # method to print keyfile info
     def info(self):
         print(
-            f"Keyword file\nTitle: {self.title}\n"+
-            f"File length: {self.length}\n"+
-            f"Number of keywords: {self.keywordcount}\n"+
-            f"Keyword locations:\n {self.keywordlocations}\n"
+            f"Keyword file\nTitle: {self.title}\n"
+            + f"File length: {self.length}\n"
+            + f"Number of keywords: {self.keywordcount}\n"
+            + f"Keyword locations:\n {self.keywordlocations}\n"
         )
 
     # method to return a list of all keywords of a type in the deck

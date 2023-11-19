@@ -4,3 +4,4 @@
 *.pptx
 testbed.py
 __pycache__
+.vscode
