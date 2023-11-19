@@ -533,7 +533,9 @@ class Nodes:
         # split lines and eject title line
         lines = input_string.split("\n")
         lines.pop(0)
-
+        if lines[0][0:1]=='$':
+            lines.pop(0)
+        self.numnodes=len(lines)
         self.nodes = np.empty((len(lines), 6))
 
         # split nodal values depending on format
@@ -551,7 +553,9 @@ class Nodes:
                     line_values = string.split(",")
                     self.nodes[idx, :] = line_values
                     
-    
+        
+                    
+    #method to transform a set of nodes using a transformation operator
     def transform(self,node_set:list[int],operator:Transformation):
         tmatrix=operator.matrix
         
@@ -565,13 +569,55 @@ class Nodes:
             new_coordinates=tmatrix @ coordinates
             print(f"New vector: {new_coordinates}")
             self.nodes[index,1:4]=new_coordinates[0:3].transpose()
+        self.update_string()
+            
+    
+    #method to update the nodes string
+    def update_string(self):
+        lines=["*NODE"]
+        match self.format:
+            case "fixed":
+                for i in range(self.numnodes):
+                    line_values=self.nodes[i,0:]
+                    line_string=(
+                        f"{int(line_values[0]):8}"+
+                        f"{line_values[1]:11G}"+
+                        f"{line_values[2]:11G}"+
+                        f"{line_values[3]:11G}"+
+                        f"{line_values[4]:3G}"+
+                        f"{line_values[5]:3G}"
+                    )
+                    lines.append(line_string)
+                
+            case "long":
+                for i in range(self.numnodes):
+                    line_values=self.nodes[i,0:]
+                    line_string=(
+                        f"{int(line_values[0]):20}"+
+                        f"{line_values[1]:15G}"+
+                        f"{line_values[2]:15G}"+
+                        f"{line_values[3]:15G}"+
+                        f"{line_values[4]:15G}"+
+                        f"{line_values[5]:15G}"
+                    )
+                    lines.append(line_string)
+            
+            case "short":
+                for i in range(self.numnodes):
+                    line_values=self.nodes[i,0:]
+                    line_string=(
+                        f"{int(line_values[0])}"+","+
+                        f"{line_values[1]}"+","+
+                        f"{line_values[2]}"+","+
+                        f"{line_values[3]}"+","+
+                        f"{line_values[4]}"+","+
+                        f"{line_values[5]}"+","
+                    )
+                    lines.append(line_string)
+            
+        self.string="\n".join(lines)
             
             
-
-
-
-
-
 # define keyfile object
 class KeywordFile:
     def __init__(self, path: str, format: str):
@@ -621,8 +667,10 @@ class KeywordFile:
     # method to print keyfile info
     def info(self):
         print(
-            f"Keyword file\nTitle: {self.title}\nFile length: {self.length}\n"
-            + f"Number of keywords: {self.keywordcount}\nKeyword locations:\n {self.keywordlocations}\n"
+            f"Keyword file\nTitle: {self.title}\n"+
+            f"File length: {self.length}\n"+
+            f"Number of keywords: {self.keywordcount}\n"+
+            f"Keyword locations:\n {self.keywordlocations}\n"
         )
 
     # method to return a list of all keywords of a type in the deck
