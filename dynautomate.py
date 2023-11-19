@@ -580,12 +580,12 @@ class Nodes:
                 for i in range(self.numnodes):
                     line_values=self.nodes[i,0:]
                     line_string=(
-                        f"{int(line_values[0]):8}"+
-                        f"{line_values[1]:11G}"+
-                        f"{line_values[2]:11G}"+
-                        f"{line_values[3]:11G}"+
-                        f"{line_values[4]:3G}"+
-                        f"{line_values[5]:3G}"
+                        f"{int(line_values[0]):8}".rjust(8)+
+                        f"{line_values[1]:11G}".rjust(16)+
+                        f"{line_values[2]:11G}".rjust(16)+
+                        f"{line_values[3]:11G}".rjust(16)+
+                        f"{line_values[4]:8G}".rjust(8)+
+                        f"{line_values[5]:8G}".rjust(8)
                     )
                     lines.append(line_string)
                 
@@ -593,11 +593,11 @@ class Nodes:
                 for i in range(self.numnodes):
                     line_values=self.nodes[i,0:]
                     line_string=(
-                        f"{int(line_values[0]):20}"+
-                        f"{line_values[1]:15G}"+
-                        f"{line_values[2]:15G}"+
-                        f"{line_values[3]:15G}"+
-                        f"{line_values[4]:15G}"+
+                        f"{int(line_values[0]):20}".rjust(20)+
+                        f"{line_values[1]:15G}".rjust(20)+
+                        f"{line_values[2]:15G}".rjust(20)+
+                        f"{line_values[3]:15G}".rjust(20)+
+                        f"{line_values[4]:15G}".rjust(20)+
                         f"{line_values[5]:15G}"
                     )
                     lines.append(line_string)
