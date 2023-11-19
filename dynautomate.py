@@ -472,6 +472,55 @@ class Keyword:
         self.string = new_keyword_string
 
 
+# define class to build node transformation operators
+class Transformation:
+    def __init__(self):
+        self.matrix = np.eye(4)
+
+    def scale(self, sx: float, sy: float, sz: float):
+        scale_matrix = np.array(
+            [[sx, 0, 0, 0], [0, sy, 0, 0], [0, 0, sz, 0], [0, 0, 0, 1]]
+        )
+        self.matrix = scale_matrix @ self.matrix
+
+    def translate(self, tx: float, ty: float, tz: float):
+        translate_matrix = np.array(
+            [[1, 0, 0, tx], [0, 1, 0, ty], [0, 0, 1, tz], [0, 0, 0, 1]]
+        )
+        self.matrix = translate_matrix @ self.matrix
+
+    def rotate(self, p1: list[float], p2: list[float], angle):
+        # convert angle to radians and calculate trig terms
+        angle_rad = angle * 3.1415926535 / 180
+        c=np.cos(angle_rad)
+        s=np.sin(angle_rad)
+        nc=(1-c)
+
+        #define unit vector between p1 and p2
+        omega=np.array([p2[0]-p1[0],p2[1]-p1[1],p2[2]-p1[2]],dtype=float)
+        omega/=np.linalg.norm(omega)
+        
+        #define matrix using rodrigues formula
+        wx,wy,wz=omega
+        
+        rotate_matrix=np.array([
+            [c+(wx*wx)*nc,wx*wy*nc-wz*s,wy*s+wx*wz*nc,0],
+            [wz*s+wx*wy*nc,c+(wy*wy)*nc,-wx*s+wy*wz*nc,0],
+            [-wy*s+wx*wz*nc,wx*s+wy*wz*nc,c+(wz*wz)*nc,0],
+            [0,0,0,1]
+        ])
+        print(f"Rotate matrix:\n {rotate_matrix}")
+        
+
+        #clean small values
+        rotate_matrix[np.abs(rotate_matrix) < 1e-9]=0
+
+        self.matrix = rotate_matrix @ self.matrix
+
+    def info(self):
+        print(f"Transformation matrix:\n{self.matrix}")
+
+
 # object to handle nodes
 class Nodes:
     def __init__(self, input_string: str, input_range: list[int], format: str):
@@ -501,63 +550,26 @@ class Nodes:
                 case "short":
                     line_values = string.split(",")
                     self.nodes[idx, :] = line_values
+                    
+    
+    def transform(self,node_set:list[int],operator:Transformation):
+        tmatrix=operator.matrix
+        
+        for index in node_set:
+            #extract nodal coordinates and reformat
+            coordinates=self.nodes[index,1:4]
+            coordinates=np.hstack((coordinates,np.array([1])))
+            coordinates=coordinates.reshape(-1,1)
+
+            #apply transformations
+            new_coordinates=tmatrix @ coordinates
+            print(f"New vector: {new_coordinates}")
+            self.nodes[index,1:4]=new_coordinates[0:3].transpose()
+            
+            
 
 
-# define class to build node transformation operators
-class Transformation:
-    def __init__(self):
-        self.matrix = np.eye(4)
 
-    def scale(self, sx: float, sy: float, sz: float):
-        scale_matrix = np.array(
-            [[sx, 0, 0, 0], [0, sy, 0, 0], [0, 0, sz, 0], [0, 0, 0, 1]]
-        )
-        self.matrix = np.matmul(self.matrix, scale_matrix)
-
-    def translate(self, tx: float, ty: float, tz: float):
-        translate_matrix = np.array(
-            [[1, 0, 0, tx], [0, 1, 0, ty], [0, 0, 1, tz], [0, 0, 0, 1]]
-        )
-        self.matrix = np.matmul(self.matrix, translate_matrix)
-
-    def rotate(self, p1: tuple[float], p2: tuple[float], angle):
-        # convert angle to radians
-        angle_rad = angle * 3.1415926535 / 180
-
-        # create the translation operators
-        T_operator = np.array(
-            [[1, 0, 0, -p1[0]], [0, 1, 0, -p1[1]], [0, 0, 1, -p1[2]], [0, 0, 0, 1]]
-        )
-        Tinv_operator = np.array(
-            [[1, 0, 0, p1[0]], [0, 1, 0, p1[1]], [0, 0, 1, p1[2]], [0, 0, 0, 1]]
-        )
-
-        # create the orthonormal coordinate system
-        s = np.array(
-            [[p2[0] - p1[0], p2[1] - p1[1], p2[2] - p1[2]], [1, 1, 0], [0, 0, 1]]
-        )
-        Q, R = np.linalg.qr(s)
-
-        # create the rotation operators
-        M_operator = np.zeros((4, 4))
-        M_operator[0:3, 0:3] = Q
-        M_operator[3, 3] = 1
-        Minv_operator = M_operator.transpose()
-
-        # calculate the angle matrix
-        c = np.cos(angle_rad)
-        s = np.sin(angle_rad)
-
-        R_operator = np.array([[c, s, 0, 0], [-s, c, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
-
-        rotate_matrix = (
-            Tinv_operator @ Minv_operator @ R_operator @ M_operator @ T_operator
-        )
-
-        self.matrix = np.matmul(self.matrix, rotate_matrix)
-
-    def info(self):
-        print(f"Transformation matrix:\n{self.matrix}")
 
 
 # define keyfile object
@@ -644,7 +656,7 @@ class KeywordFile:
             return keyword_list
 
     # method to replace a keyword in the string with a new keyword object
-    def replace_keyword(self, keyword_to_replace: Keyword):
+    def replace_keyword(self, keyword_to_replace):
         # define the range and string to be inserted
         insert_range = keyword_to_replace.range
         insert_string = keyword_to_replace.string
