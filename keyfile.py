@@ -700,13 +700,35 @@ class KeywordFile:
                     new_keyword_string, new_keyword_range, self.format
                 )
                 keyword_list.append(new_keyword)
-
+                
         # check if any keywords were found and return list or raise exception
         if len(keyword_list) == 0:
             raise Exception(f"No keyword of type *{keyword_title} found")
         else:
             return keyword_list
 
+
+    #method to return an object with all of the nodes in the deck
+    def get_nodes(self):
+        title_length=4
+        
+        for idx, loc in enumerate(self.keywordlocations):
+            # check if it's the correct keyword
+            if self.string[loc + 1 : loc + 1 + title_length] == "NODE":
+                new_keyword_string = self.string[
+                    self.keywordlocations[idx] : self.keywordlocations[idx + 1] - 1
+                ]
+                new_keyword_range = [
+                    self.keywordlocations[idx],
+                    self.keywordlocations[idx + 1] - 1,
+                ]
+
+                # create keyword object
+                new_keyword = Nodes(
+                    new_keyword_string, new_keyword_range, self.format
+                )
+        
+        
     # method to replace a keyword in the string with a new keyword object
     def replace_keyword(self, keyword_to_replace):
         # define the range and string to be inserted
