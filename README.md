@@ -16,9 +16,9 @@ A workflow for setting up copies of a LS-DYNA input deck for parametric analyses
 *string:* (String) text contents of the keyword file
 
 ### Methods
-'''python
+```python
 def __init__(self, path: str, format: str) -> KeywordFile:
-'''
+```
 
 Open and parse a keyword file.
 
@@ -29,17 +29,17 @@ Open and parse a keyword file.
 
 
 
-'''python
+```python
 def info(self) -> str:
-'''
+```
 
 Print keyfile summary
 
 
 
-'''python
+```python
 def get_keywords(self, keyword_title: str) -> list[Keyword]:
-'''
+```
 
 Retrieve all instances of a keyword with a given name in the keyfile
 
@@ -49,15 +49,15 @@ Retrieve all instances of a keyword with a given name in the keyfile
 
 
 
-'''python
+```python
 def get_nodes(self) -> Nodes:
-'''
+```
 
 Retrieves the *NODE keyword as a Nodes object
 
-'''python
+```python
 def replace_keyword(self, keyword_to_replace: Keyword | Nodes):
-'''
+```
 
 Replace an existing keyword with a different keyword of the same type
 
