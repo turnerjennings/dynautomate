@@ -4,4 +4,13 @@ setup.py
 dynautomate.egg-info/PKG-INFO
 dynautomate.egg-info/SOURCES.txt
 dynautomate.egg-info/dependency_links.txt
+dynautomate.egg-info/requires.txt
 dynautomate.egg-info/top_level.txt
+src/dynautomate/__init__.py
+src/dynautomate/card.py
+src/dynautomate/find_nth_comma.py
+src/dynautomate/is_float.py
+src/dynautomate/keyfile.py
+src/dynautomate/keyword.py
+src/dynautomate/nodes.py
+src/dynautomate/transformation.py

@@ -12,3 +12,4 @@ Classifier: License :: OSI Approved :: MIT License
 Classifier: Natural Language :: English
 Classifier: Topic :: Scientific/Engineering
 License-File: LICENSE
+Requires-Dist: numpy
