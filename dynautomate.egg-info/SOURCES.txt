@@ -1,0 +1,7 @@
+LICENSE
+README.md
+setup.py
+dynautomate.egg-info/PKG-INFO
+dynautomate.egg-info/SOURCES.txt
+dynautomate.egg-info/dependency_links.txt
+dynautomate.egg-info/top_level.txt

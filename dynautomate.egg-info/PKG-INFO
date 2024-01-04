@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: dynautomate
+Version: 0.1.0.dev0
+Summary: parametric simulation workflow for LS-DYNA on hpc
+Home-page: https://github.com/turnerjennings/dynautomate
+Author: Turner Jennings
+Author-email: turner.jennings@outlook.com
+License: MIT
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Topic :: Scientific/Engineering
+License-File: LICENSE
