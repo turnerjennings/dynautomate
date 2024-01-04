@@ -1,5 +1,5 @@
 # function to find the nth comma in a comma separated list
-# return: int
+# return: integer
 def find_nth_comma(input_string: str, n: int) -> int:
     position = -1
     for _ in range(n):
