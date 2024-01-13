@@ -4,7 +4,9 @@ Workflows for parametric DOE for LS-DYNA on HPC.  This package is still a work i
 
 ## Installation
 
-    Package not available on pip pending full testing.  Repository can be downloaded and installed locally.
+Package is not available on pip pending full testing.  Repository can be downloaded and installed locally:
+
+    py -m pip install .
 
 
 ## Project Overview
