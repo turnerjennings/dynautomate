@@ -4,7 +4,7 @@ A workflow for building parametric DOEs in LS-DYNA on HPC
 
 ## Documentation
 
-Project documentation can be found [here](https://https://turnerjennings.github.io/dynautomate/)
+Project documentation can be found [here](https://turnerjennings.github.io/dynautomate/)
 
 ## Examples
 ### Edit properties of a keyword
