@@ -1,0 +1,15 @@
+site_name: Dynautomate
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.path
+    - toc.integrate
+nav:
+  - Getting started: index.md
+  - Keyword File: keyfile.md
+  - Keywords: keyword.md
+  - Cards: cards.md
+  - Transformation: transform.md

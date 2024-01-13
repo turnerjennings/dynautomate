@@ -1,6 +1,6 @@
 # Dynautomate
 
-A workflow for setting up copies of a LS-DYNA input deck for parametric analyses.  
+A workflow for building parametric DOEs in LS-DYNA on HPC 
 
 # Objects
 ## keyfile

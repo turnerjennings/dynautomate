@@ -84,6 +84,8 @@ class KeywordFile:
         # check if any keywords were found and return list or raise exception
         if len(keyword_list) == 0:
             raise Exception(f"No keyword of type *{keyword_title} found")
+        elif len(keyword_list) == 1:
+            return keyword_list[0]
         else:
             return keyword_list
 
