@@ -10,6 +10,7 @@ theme:
 nav:
   - Getting started: index.md
   - Keyword File: keyfile.md
-  - Keywords: keyword.md
+  - Keyword: keyword.md
   - Cards: cards.md
+  - Nodes: nodes.md
   - Transformation: transform.md

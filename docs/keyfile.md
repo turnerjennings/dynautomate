@@ -4,6 +4,18 @@ The keyfile object contains and manages the contents of the entire LS-DYNA solve
 
 ## Attributes
 
+| Attribute | Type | Description|
+|---------|-------------|-------------|
+| self.title | String | Keyword deck title (from *TITLE keyword) |
+| self.string | String | Ascii contents of the keyword file |
+| self.format | String | Keyword file type, "short" (comma separated), "fixed" (standard PrePost format), or "Long" (double length PrePost format) |
+| self.path | String | File path to .k file |
+| self.length | int | Number of ascii characters in the keyword file |
+| self.keywordcount | int | Number of keywords in the file |
+| self.keywordlocations | list[int] | List of the starting index of each keyword in the file |
+
+
+
 
 ## Methods
 
@@ -80,7 +92,7 @@ __returns__
 
 Returns Keyword object (one matching keyword found) or list of Keyword objects (multiple matching keywords found)
 
-### get_nodes
+### __get_nodes__
 
 Create a Nodes object with all nodes in the keyword file
 
@@ -101,7 +113,7 @@ __returns__
 
 Returns a Nodes object (special keyword type) with the node numbers and coordinates stored in numpy array format.
 
-### replace_keyword
+### __replace_keyword__
 
 Replace an existing keyword in the solver deck with a new one.
 
@@ -129,7 +141,7 @@ __returns__
 
 Updates the KeywordFile object string and keywordlocation information.
 
-### replace_card
+### __replace_card__
 Replace an existing card in the solver deck with a new one.
 
 ``` python
@@ -159,7 +171,7 @@ __returns__
 Updates the KeywordFile object string and keywordlocation information.
 
 
-### write_keyfile
+### __write_keyfile__
 Writes a new keyword file output to the specified directory.
 
 ``` python

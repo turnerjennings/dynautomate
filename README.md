@@ -51,7 +51,7 @@ for i in range(3):
 
 ### Create a transformation operator
 ```python
-transform_operator=keyfile.Transformation()
+transform_operator=Transformation()
 
 #add translation by 2 in x direction
 transform_operator.translate(2,0,0)
