@@ -1,5 +1,5 @@
-from is_float import *
-from find_nth_comma import *
+from .is_float import *
+from .find_nth_comma import *
 # define card object
 class Card:
     def __init__(self, input_string: str, input_range: list[int], format: str):

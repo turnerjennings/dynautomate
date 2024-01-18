@@ -1,6 +1,7 @@
-from nodes import *
-from card import *
-from keyword import Keyword
+from .nodes import *
+from .card import *
+from .keywordclass import Keyword
+from .ArrayKeyword import *
 
 # define keyfile object
 class KeywordFile:
@@ -58,7 +59,7 @@ class KeywordFile:
         )
 
     # method to return a list of all keywords of a type in the deck
-    def get_keywords(self, keyword_title: str):
+    def get_keywords(self, keyword_title: str,array=False):
         title_length = len(keyword_title)
         keyword_list = []
 
@@ -76,9 +77,12 @@ class KeywordFile:
                 ]
 
                 # create keyword object
+
                 new_keyword = Keyword(
                     new_keyword_string, new_keyword_range, self.format
-                )
+                    )
+
+                    
                 keyword_list.append(new_keyword)
                 
         # check if any keywords were found and return list or raise exception
@@ -109,6 +113,39 @@ class KeywordFile:
                 new_keyword = Nodes(
                     new_keyword_string, new_keyword_range, self.format
                 )
+        
+        return new_keyword
+        
+
+    def get_elements(self,eltype:str):
+        title_length=8+len(eltype)
+        keyword_list=[]
+        
+        for idx, loc in enumerate(self.keywordlocations):
+            # check if it's the correct keyword
+            if self.string[loc + 1 : loc + 1 + title_length] == "ELEMENT_" + eltype:
+                new_keyword_string = self.string[
+                    self.keywordlocations[idx] : self.keywordlocations[idx + 1] - 1
+                ]
+                new_keyword_range = [
+                    self.keywordlocations[idx],
+                    self.keywordlocations[idx + 1] - 1,
+                ]
+
+                # create keyword object
+                new_keyword = Elements(
+                    new_keyword_string, new_keyword_range, self.format
+                )
+                keyword_list.append(new_keyword)
+
+        # check if any keywords were found and return list or raise exception
+        if len(keyword_list) == 0:
+            raise Exception(f"No keyword of type *ELEMENT_{eltype} found")
+        elif len(keyword_list) == 1:
+            return keyword_list[0]
+        else:
+            return keyword_list
+        
         
         
     # method to replace a keyword in the string with a new keyword object

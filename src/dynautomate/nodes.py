@@ -1,5 +1,5 @@
 import numpy as np
-from transformation import *
+from .transformation import *
 
 # object to handle nodes
 class Nodes:
