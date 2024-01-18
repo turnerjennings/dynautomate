@@ -146,6 +146,35 @@ class KeywordFile:
         else:
             return keyword_list
         
+    def get_set(self,settype:str):
+        title_length=4+len(settype)
+        keyword_list=[]
+        
+        for idx, loc in enumerate(self.keywordlocations):
+            # check if it's the correct keyword
+            if self.string[loc + 1 : loc + 1 + title_length] == "SET_" + settype:
+                new_keyword_string = self.string[
+                    self.keywordlocations[idx] : self.keywordlocations[idx + 1] - 1
+                ]
+                new_keyword_range = [
+                    self.keywordlocations[idx],
+                    self.keywordlocations[idx + 1] - 1,
+                ]
+
+                # create keyword object
+                new_keyword = Set(
+                    new_keyword_string, new_keyword_range, self.format
+                )
+                keyword_list.append(new_keyword)
+
+        # check if any keywords were found and return list or raise exception
+        if len(keyword_list) == 0:
+            raise Exception(f"No keyword of type *ELEMENT_{settype} found")
+        elif len(keyword_list) == 1:
+            return keyword_list[0]
+        else:
+            return keyword_list
+        
         
         
     # method to replace a keyword in the string with a new keyword object

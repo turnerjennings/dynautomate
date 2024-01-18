@@ -66,11 +66,15 @@ class ArrayKeyword:
         else:
             array_start=1 
             self.arrayrange=[self.range[0] + len(string_lines[0]) + 1, self.range[1]]
+
+        self.cardcount=len(self.cards)
         
         
         
 
         array_string=string_lines[array_start:]
+
+        print(array_string[0])
 
         numlines = len(array_string)
         self.array = np.empty((numlines, self.width))
@@ -89,6 +93,30 @@ class ArrayKeyword:
                 case "short":
                     line_values = string.split(",")
                     self.array[idx, :] = line_values
+
+    # method to print the keyword information
+    def info(self):
+        if len(self.string) > 100:
+            string_snippet = self.string[0:500] + "..."
+        else:
+            string_snippet = self.string
+
+        print(
+            "Keyword name: "
+            + str(self.name)
+            + "\nKeyword format: "
+            + str(self.format)
+            + "\nKeyword range: "
+            + str(self.range)
+            + "\nKeyword card count: "
+            + str(self.cardcount)
+            + "\nKeyword array dimensions:"
+            + str(self.array.shape)
+            + "\nKeyword cards: \n"
+            + str(self.cards)
+            + "\nKeyword string: \n"
+            + str(string_snippet)
+        )
 
 class Nodes(ArrayKeyword):
     headercards=0
