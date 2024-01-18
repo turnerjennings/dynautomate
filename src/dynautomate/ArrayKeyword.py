@@ -4,7 +4,7 @@ from .card import *
 class ArrayKeyword:
 
     headercards=0
-    width=6
+    width=10
     
     def __init__(self, input_string: str, input_range: list[int], format:str):
         
@@ -80,15 +80,15 @@ class ArrayKeyword:
             match self.format:
                 case "fixed":
                     line_values = string.split()
-                    self.nodes[idx, :] = line_values
+                    self.array[idx, :] = line_values
 
                 case "long":
                     line_values = string.split()
-                    self.nodes[idx, :] = line_values
+                    self.array[idx, :] = line_values
 
                 case "short":
                     line_values = string.split(",")
-                    self.nodes[idx, :] = line_values
+                    self.array[idx, :] = line_values
 
 class Nodes(ArrayKeyword):
     headercards=0
