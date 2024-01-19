@@ -42,11 +42,7 @@ class Card:
                         card_values[i] = "          "
 
                     else:
-                        raise ValueError(
-                            "Error parsing fixed card format: Card value at position "
-                            + str(i)
-                            + " is not an integer or a float"
-                        )
+                        card_values[i]=val
 
                 self.values = card_values
 
@@ -75,11 +71,7 @@ class Card:
                     elif value == "" or value.isspace() == True:
                         card_values[i] = ""
                     else:
-                        raise ValueError(
-                            "Error parsing short card format: Card value at position "
-                            + str(i)
-                            + " is not an integer or a float"
-                        )
+                        card_values[i]=val
 
                 self.values = card_values
 
@@ -168,9 +160,12 @@ class Card:
                         self.string = new_string
 
                     else:
-                        raise ValueError(
-                            "The value inserted in the keyword is not an int or a float"
+                        new_string = (
+                            self.string[0:preceding_value_end]
+                            + str(edit_value).rjust(edit_range)
+                            + self.string[edit_value_end:]
                         )
+                        self.string = new_string
 
                 else:
                     raise TypeError(
@@ -248,9 +243,12 @@ class Card:
                     )
 
                 else:
-                    raise TypeError(
-                        "Input value type does not match existing data type"
-                    )
+                    new_string = (
+                                self.string[0 : preceding_value_end + 1]
+                                + str(edit_value)
+                                + self.string[edit_value_end:]
+                            )
+                    self.string = new_string
 
             case "long":
                 # check if the value being inserted is the same as the existing value

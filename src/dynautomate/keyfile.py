@@ -1,4 +1,3 @@
-from .nodes import *
 from .card import *
 from .keywordclass import Keyword
 from .ArrayKeyword import *
