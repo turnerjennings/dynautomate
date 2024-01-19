@@ -113,6 +113,51 @@ __returns__
 
 Returns a Nodes object (special keyword type) with the node numbers and coordinates stored in numpy array format.
 
+### __get_elements__
+
+Create a Elements object with all elements of a specified type in the keyword file
+
+``` python
+def get_elements(self,eltype:str):
+
+f=KeywordFile("/path/to.k","short")
+
+f_solids=f.get_elements("SOLID")
+f_quadraticsolids=f.get_elements("SOLID_T4TOT10")
+
+```
+
+__inputs__
+
+| Attribute | Type | Description|
+|---------|-------------|-------------|
+| eltype | String | element keyword name to find, without "*ELEMENT_" (e.g., "SOLID" for "*ELEMENT_SOLID" keyword) |
+__returns__
+
+Returns a Elements object with the keyword file element connectivity table as a numpy array (self.array)
+
+### __get_set__
+
+Create a Set object with all sets of a specified type in the keyword file
+
+``` python
+def get_elements(self,eltype:str):
+
+f=KeywordFile("/path/to.k","short")
+
+f_nodes=f.get_elements()
+
+```
+
+__inputs__
+
+| Attribute | Type | Description|
+|---------|-------------|-------------|
+| eltype | String | element keyword name to find, without "*SET_" (e.g., "NODE_LIST" for "*SET_NODE_LIST" keyword) |
+__returns__
+
+Returns a Set object (or list of set objects) with all sets of the specified type.
+
 ### __replace_keyword__
 
 Replace an existing keyword in the solver deck with a new one.

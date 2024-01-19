@@ -5,7 +5,7 @@ from .transformation import *
 class ArrayKeyword:
 
     headercards=0
-    width=10
+    width=8
     
     def __init__(self, input_string: str, input_range: list[int], format:str):
         

@@ -11,6 +11,6 @@ nav:
   - Getting started: index.md
   - Keyword File: keyfile.md
   - Keyword: keyword.md
+  - Array Keyword: arraykeyword.md
   - Cards: cards.md
-  - Nodes: nodes.md
   - Transformation: transform.md
