@@ -9,7 +9,8 @@ setup(
     author_email='turner.jennings@outlook.com',
     url='https://github.com/turnerjennings/dynautomate',
     license='MIT',
-    packages=["src/dynautomate"],
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     install_requires=[
         "numpy"],
     classifiers=[

@@ -1,0 +1,16 @@
+LICENSE
+README.md
+setup.py
+src/dynautomate/ArrayKeyword.py
+src/dynautomate/__init__.py
+src/dynautomate/card.py
+src/dynautomate/find_nth_comma.py
+src/dynautomate/is_float.py
+src/dynautomate/keyfile.py
+src/dynautomate/keywordclass.py
+src/dynautomate/transformation.py
+src/dynautomate.egg-info/PKG-INFO
+src/dynautomate.egg-info/SOURCES.txt
+src/dynautomate.egg-info/dependency_links.txt
+src/dynautomate.egg-info/requires.txt
+src/dynautomate.egg-info/top_level.txt
