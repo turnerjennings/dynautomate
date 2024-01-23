@@ -3,7 +3,7 @@ from setuptools import setup,find_packages
 
 setup(
     name='dynautomate',
-    version='0.1.0.dev0',
+    version='0.1.1',
     description='parametric simulation workflow for LS-DYNA on hpc',
     author='Turner Jennings',
     author_email='turner.jennings@outlook.com',

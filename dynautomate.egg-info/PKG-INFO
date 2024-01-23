@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: dynautomate
-Version: 0.1.0.dev0
+Version: 0.1.1
 Summary: parametric simulation workflow for LS-DYNA on hpc
 Home-page: https://github.com/turnerjennings/dynautomate
 Author: Turner Jennings
