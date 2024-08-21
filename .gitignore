@@ -6,3 +6,4 @@ testbed.py
 __pycache__
 .vscode
 *.code-workspace
+.pypirc
