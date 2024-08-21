@@ -7,3 +7,6 @@ __pycache__
 .vscode
 *.code-workspace
 .pypirc
+dist/
+build/
+dynautomate.egg-info/
