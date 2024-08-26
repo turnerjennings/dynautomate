@@ -1,4 +1,5 @@
 site_name: Dynautomate
+site_url: https://turnerjennings.github.io/dynautomate/
 theme:
   name: material
   features:
